@@ -1,12 +1,14 @@
 "use client"
 
-import Map from "@/pages/Map";
+
+import VolunteerPanel from "@/app/components/pages/volunterr-panel";
 import React from "react";
+
 
 const page = () => {
   return (
     <div>
-        <Map />
+        <VolunteerPanel />
     </div>
   );
 };

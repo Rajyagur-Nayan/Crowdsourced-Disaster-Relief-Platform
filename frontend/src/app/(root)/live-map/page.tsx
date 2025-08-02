@@ -1,12 +1,12 @@
 "use client"
 
+import Map from "@/app/components/pages/Map";
 import React from "react";
-import Dashboard from "@/pages/Dashboard";
 
 const page = () => {
   return (
     <div>
-        <Dashboard />
+        <Map />
     </div>
   );
 };
