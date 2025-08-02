@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import toast from "react-hot-toast";
-import { DialogClose } from "@radix-ui/react-dialog";
+import axios from "axios";
 
 // LoginDialog Component
 export function LoginDialog({ onClose }: any) {
@@ -20,7 +20,10 @@ export function LoginDialog({ onClose }: any) {
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      console.log(email, password);
+      await axios.post("http://localhost:8080/login", {
+        email,
+        password,
+      });
       toast.success("Login Success");
     } catch (error) {
       console.log(error);
@@ -66,15 +69,15 @@ export function LoginDialog({ onClose }: any) {
               required
             />
           </div>
-          <DialogClose>
+
+          <DialogFooter className="flex justify-end pt-4">
             <Button
               type="submit"
-              className="bg-blue-600 text-white cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md"
+              className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-md"
             >
               Login
             </Button>
-          </DialogClose>
-          <DialogFooter className="flex justify-end pt-4"></DialogFooter>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

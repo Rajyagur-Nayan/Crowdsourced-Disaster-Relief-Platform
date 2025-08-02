@@ -21,6 +21,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MapPin } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import axios from "axios";
 
 export default function Help() {
   const [urgency, setUrgency] = useState("low");
@@ -30,19 +31,24 @@ export default function Help() {
   const [helpType, setHelpType] = useState("");
   const [situation, setSituation] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     try {
-      const formData = {
-        fullName,
-        phoneNumber,
-        location,
-        helpType,
-        situation,
-        urgency,
-      };
-      console.log("Submitted Request:", formData);
-
+      await axios.post("http://localhost:8080/request", {
+        full_name: fullName,
+        location: location,
+        help_type: helpType,
+        description: situation,
+        urgency_level: urgency,
+      });
       toast.success("Data Added Success");
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      setFullName(""),
+        setHelpType(""),
+        setLocation(""),
+        setPhoneNumber(""),
+        setSituation(""),
+        setUrgency("low");
     } catch (error) {
       console.log(error);
       toast.error("Something Wants Wrong");

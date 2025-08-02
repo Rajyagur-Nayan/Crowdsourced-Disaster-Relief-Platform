@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = Cookies.get("auth_token");
+    const storedToken = Cookies.get("login_token");
     if (storedToken) {
       setToken(storedToken);
     }
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    Cookies.remove("auth_token");
+    Cookies.remove("login_token");
     setToken(null);
   };
 

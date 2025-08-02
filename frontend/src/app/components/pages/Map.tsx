@@ -19,12 +19,6 @@ export default function Map() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-<<<<<<< HEAD
-=======
-      {/* Header */}
-
-
->>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
       {/* Main Content */}
       <main className="flex min-h-[calc(100vh-160px)] p-8 space-x-8">
         {/* Sidebar */}
@@ -103,16 +97,11 @@ export default function Map() {
         <div className="flex-1 rounded-xl shadow-lg relative overflow-hidden">
           <div className="h-full w-full bg-gray-200 flex items-center justify-center p-4">
             <Image
-<<<<<<< HEAD
               src="/img1.webp"
               alt="Interactive Map View"
               fill
-=======
               width={100}
               height={100}
-              src="/img1.webp"
-              alt="Interactive Map View"
->>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
               className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-500">
@@ -122,11 +111,6 @@ export default function Map() {
           </div>
         </div>
       </main>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
     </div>
   );
 }

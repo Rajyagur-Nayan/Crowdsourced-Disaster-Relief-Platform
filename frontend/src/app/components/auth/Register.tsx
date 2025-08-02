@@ -9,12 +9,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-<<<<<<< HEAD
 import toast from "react-hot-toast";
-import { DialogClose } from "@radix-ui/react-dialog";
-=======
-import axios from 'axios'
->>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
+import axios from "axios";
 
 export function RegisterDialog({ onClose }: any) {
   const [email, setEmail] = useState("");
@@ -24,10 +20,16 @@ export function RegisterDialog({ onClose }: any) {
   const [role, setRole] = useState("normal"); // default role
 
   const handleRegister = async (event: React.FormEvent) => {
-<<<<<<< HEAD
     event.preventDefault();
     try {
       console.log({
+        name,
+        email,
+        password,
+        confirmPassword,
+        role,
+      });
+      await axios.post("http://localhost:8080/signup", {
         name,
         email,
         password,
@@ -40,41 +42,6 @@ export function RegisterDialog({ onClose }: any) {
       toast.error("Register Failed");
     }
   };
-=======
-  event.preventDefault();
-
-  if (password !== confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
-
-  try {
-    const res = await axios.post("http://localhost:5000/signup", {
-      name,
-      email,
-      password,
-      role,
-    }, {
-      withCredentials: true,
-    });
-
-    alert("Registration successful!");
-
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setRole("user");
-
-    // Optional: close the dialog
-    onClose?.();
-  } catch (error: any) {
-    console.error("Signup error:", error);
-    alert(error.response?.data?.error || "Something went wrong!");
-  }
-};
-
->>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
@@ -93,7 +60,7 @@ export function RegisterDialog({ onClose }: any) {
             <Input
               id="userName"
               type="text"
-              placeholder="zaynmakik"
+              placeholder="xyz_07"
               className="mt-1 w-full"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -159,19 +126,18 @@ export function RegisterDialog({ onClose }: any) {
               required
             >
               <option value="admin">Admin</option>
-              <option value="normal">User</option>
+              <option value="normal">Normal</option>
               <option value="volunteer">Volunteer</option>
             </select>
           </div>
+
           <DialogFooter className="flex justify-end pt-4">
-            <DialogClose>
-              <Button
-                type="submit"
-                className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
-              >
-                Register
-              </Button>
-            </DialogClose>
+            <Button
+              type="submit"
+              className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
+            >
+              Register
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
