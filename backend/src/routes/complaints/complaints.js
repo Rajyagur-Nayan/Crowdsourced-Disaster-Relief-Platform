@@ -1,51 +1,42 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const pool = require('../../connections/DB.connect'); // PostgreSQL pool connection
-
 const router = express.Router();
+const pool = require('../../connections/DB.connect.js');
 
-// Multer setup
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
-
-// POST route
-router.post('/', upload.single('photo'), async (req, res) => {
-  const {
-    fullName,
-    phoneNumber,
-    location,
-    helpType,
-    description,
-    urgencyLevel
-  } = req.body;
-
-  const photoPath = req.file ? req.file.path : null;
-
+router.get('/', async (req, res) => {
   try {
-    const result = await pool.query(
-      `INSERT INTO help_requests 
-        (full_name, phone_number, location, help_type, description, urgency_level, photo_path) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *`,
-      [fullName, phoneNumber, location, helpType, description, urgencyLevel, photoPath]
-    );
+    const totalRequestsRes = await pool.query('SELECT COUNT(*) FROM "requests"');
+    const pendingRequestsRes = await pool.query(`SELECT COUNT(*) FROM "requests" WHERE status = 'Pending'`);
+    const fulfilledRequestsRes = await pool.query(`SELECT COUNT(*) FROM "requests" WHERE status = 'Fulfilled'`);
+    // const activeVolunteersRes = await pool.query(`SELECT COUNT(*) FROM volunteers WHERE is_active = true`);
 
-    res.status(201).json({
-      message: 'Help request stored in database',
-      data: result.rows[0]
+    const recentRequestsRes = await pool.query(`
+      SELECT id, full_name AS requester, location, help_type, urgency_level, status, created_at 
+      FROM "requests" 
+      ORDER BY created_at DESC 
+    `);
+
+    const categoryCountRes = await pool.query(`
+      SELECT help_type, COUNT(*) as count 
+      FROM "requests" 
+      GROUP BY help_type
+    `);
+
+    const requestCategories = {};
+    categoryCountRes.rows.forEach(row => {
+      requestCategories[row.help_type] = parseInt(row.count);
+    });
+
+    res.json({
+      totalRequests: parseInt(totalRequestsRes.rows[0].count),
+      pendingRequests: parseInt(pendingRequestsRes.rows[0].count),
+      // activeVolunteers: parseInt(activeVolunteersRes.rows[0].count),
+      fulfilledRequests: parseInt(fulfilledRequestsRes.rows[0].count),
+      recentHelpRequests: recentRequestsRes.rows,
+      requestCategories: requestCategories
     });
   } catch (err) {
-    console.error('❌ Error saving to DB:', err);
-    res.status(500).json({ error: 'Failed to save help request' });
+    console.error('Dashboard fetch error:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

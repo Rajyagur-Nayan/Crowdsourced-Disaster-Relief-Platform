@@ -20,6 +20,8 @@ app.get('/', (req, res) => {
 
 app.use('/signup', require('./src/routes/user/signup.js'));
 app.use('/login', require('./src/routes/user/login.js'));
+app.use('/request',require('./src/routes/complaints/requests.js'));
+app.use('/dashboard',require('./src/routes/complaints/complaints.js'));
 
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
