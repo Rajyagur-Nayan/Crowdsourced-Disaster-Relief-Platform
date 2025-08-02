@@ -77,10 +77,10 @@ export default function Dashboard() {
             <span>logo</span>
           </div>
           <div className="flex items-center space-x-6">
-            <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+            <a href="/home" className="text-sm font-medium text-gray-600 hover:text-gray-900">
               Home
             </a>
-            <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+            <a href="map" className="text-sm font-medium text-gray-600 hover:text-gray-900">
               Live Map
             </a>
             <a href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900">
