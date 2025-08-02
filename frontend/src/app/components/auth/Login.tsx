@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import toast from "react-hot-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 // LoginDialog Component
 export function LoginDialog({ onClose }: any) {
@@ -17,7 +19,13 @@ export function LoginDialog({ onClose }: any) {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(event);
+    try {
+      console.log(email, password);
+      toast.success("Login Success");
+    } catch (error) {
+      console.log(error);
+      toast.error("Login Failed");
+    }
   };
 
   return (
@@ -58,15 +66,15 @@ export function LoginDialog({ onClose }: any) {
               required
             />
           </div>
-
-          <DialogFooter className="flex justify-end pt-4">
+          <DialogClose>
             <Button
               type="submit"
               className="bg-blue-600 text-white cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md"
             >
               Login
             </Button>
-          </DialogFooter>
+          </DialogClose>
+          <DialogFooter className="flex justify-end pt-4"></DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

@@ -1,21 +1,30 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Filter, ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
-import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Filter, ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function Map() {
   const [urgency, setUrgency] = useState("all");
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
+<<<<<<< HEAD
+=======
       {/* Header */}
 
 
+>>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
       {/* Main Content */}
       <main className="flex min-h-[calc(100vh-160px)] p-8 space-x-8">
         {/* Sidebar */}
@@ -50,7 +59,11 @@ export default function Map() {
               {/* Urgency Level */}
               <div className="space-y-2">
                 <Label>Urgency Level</Label>
-                <RadioGroup value={urgency} onValueChange={setUrgency} className="space-y-2">
+                <RadioGroup
+                  value={urgency}
+                  onValueChange={setUrgency}
+                  className="space-y-2"
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="all" id="all-urgency" />
                     <Label htmlFor="all-urgency">All</Label>
@@ -90,10 +103,16 @@ export default function Map() {
         <div className="flex-1 rounded-xl shadow-lg relative overflow-hidden">
           <div className="h-full w-full bg-gray-200 flex items-center justify-center p-4">
             <Image
+<<<<<<< HEAD
+              src="/img1.webp"
+              alt="Interactive Map View"
+              fill
+=======
               width={100}
               height={100}
               src="/img1.webp"
               alt="Interactive Map View"
+>>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
               className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-500">
@@ -103,8 +122,11 @@ export default function Map() {
           </div>
         </div>
       </main>
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
     </div>
   );
 }

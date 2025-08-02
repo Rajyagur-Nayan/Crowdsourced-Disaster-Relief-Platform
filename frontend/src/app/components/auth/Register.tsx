@@ -9,7 +9,12 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+<<<<<<< HEAD
+import toast from "react-hot-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
+=======
 import axios from 'axios'
+>>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
 
 export function RegisterDialog({ onClose }: any) {
   const [email, setEmail] = useState("");
@@ -19,6 +24,23 @@ export function RegisterDialog({ onClose }: any) {
   const [role, setRole] = useState("normal"); // default role
 
   const handleRegister = async (event: React.FormEvent) => {
+<<<<<<< HEAD
+    event.preventDefault();
+    try {
+      console.log({
+        name,
+        email,
+        password,
+        confirmPassword,
+        role,
+      });
+      toast.success("Register Success");
+    } catch (error) {
+      console.log(error);
+      toast.error("Register Failed");
+    }
+  };
+=======
   event.preventDefault();
 
   if (password !== confirmPassword) {
@@ -52,6 +74,7 @@ export function RegisterDialog({ onClose }: any) {
   }
 };
 
+>>>>>>> 70b812f221eb52da304123cb5d8f29bef179cac1
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
@@ -140,14 +163,15 @@ export function RegisterDialog({ onClose }: any) {
               <option value="volunteer">Volunteer</option>
             </select>
           </div>
-
           <DialogFooter className="flex justify-end pt-4">
-            <Button
-              type="submit"
-              className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
-            >
-              Register
-            </Button>
+            <DialogClose>
+              <Button
+                type="submit"
+                className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
+              >
+                Register
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
