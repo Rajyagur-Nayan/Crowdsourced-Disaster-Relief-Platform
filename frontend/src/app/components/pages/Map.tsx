@@ -14,7 +14,7 @@ export default function Map() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
       {/* Header */}
-   
+
 
       {/* Main Content */}
       <main className="flex min-h-[calc(100vh-160px)] p-8 space-x-8">
@@ -90,9 +90,11 @@ export default function Map() {
         <div className="flex-1 rounded-xl shadow-lg relative overflow-hidden">
           <div className="h-full w-full bg-gray-200 flex items-center justify-center p-4">
             <Image
-              src="/img1.webp" 
-              alt="Interactive Map View" 
-              className="w-full h-full object-cover rounded-xl" 
+              width={100}
+              height={100}
+              src="/img1.webp"
+              alt="Interactive Map View"
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-500">
               <p className="font-bold text-lg">Interactive Map View</p>
@@ -102,7 +104,7 @@ export default function Map() {
         </div>
       </main>
 
-      
+
     </div>
   );
 }
