@@ -22,6 +22,8 @@ function authenticateToken(req, res, next) {
 // POST /api/requests
 router.post('/', authenticateToken, async (req, res) => {
     const { full_name, help_type, description, urgency_level, location, latitude, longitude } = req.body;
+    const lat = latitude ?? 10.00;
+    const long = longitude ?? 10.00;
     const user_id = req.user.id;
 
     if (!help_type || !urgency_level || !location) {
@@ -32,7 +34,7 @@ router.post('/', authenticateToken, async (req, res) => {
         const result = await pool.query(
             `INSERT INTO requests (user_id, full_name, help_type, description, urgency_level, location, latitude, longitude )
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-            [user_id, full_name || null, help_type, description || null, urgency_level, location, latitude, longitude ]
+            [user_id, full_name || null, help_type, description || null, urgency_level, location, lat, long]
         );
 
         res.status(201).json(result.rows[0]);
