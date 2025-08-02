@@ -34,7 +34,7 @@ export default function Help() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/request", {
+      await axios.post("http://localhost:3000/request", {
         full_name: fullName,
         location: location,
         help_type: helpType,

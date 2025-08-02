@@ -39,9 +39,9 @@ router.post('/', async (req, res) => {
             .status(200)
             .cookie('login_token', token, {
                 httpOnly: true,
-                sameSite: 'None',
-                secure: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                secure: false,        // ⚠️ false for localhost (true for HTTPS)
+                sameSite: 'lax',      // or 'none' only if using secure: true
+                maxAge: 24 * 60 * 60 * 7000 // 7 day
             })
             .json({ message: 'Login successful', token, user: data });
 
