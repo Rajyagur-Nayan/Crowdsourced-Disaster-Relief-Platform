@@ -2,34 +2,54 @@ const express = require('express');
 const { generateToken, verifyToken } = require('../../utils/jwt.js');
 const { hashPassword, comparePassword } = require('../../utils/hash.js');
 const generateOTP = require('../../controllers/createOTP.controllers.js');
-const { DBconnect, connection } = require('../../connections/DB.connect.js');
+const pool = require('../../connections/DB.connect.js');
 
 require('dotenv').config();
 
 const router = express.Router();
 
-
 router.post('/', async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
-    const DBres = await connection.query('SELECT * FROM "users" WHERE email = $1', [email]);
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
 
-    if (DBres.rows.length == 0) {
-        res.status(404).send('wrong email id');
-    } else if (!(DBres.rows[0].is_verified)) {
-        res.status(400).send('user not verified');
-    } else if (await comparePassword(password, DBres.rows[0].password_hash)) {
-        console.log(DBres.rows[0]);
-        const data = { "id": DBres.rows[0].id, "name": DBres.rows[0].display_name }
+    try {
+        const DBres = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (DBres.rows.length === 0) {
+            return res.status(404).json({ error: 'Wrong email' });
+        }
+
+        const user = DBres.rows[0];
+
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Wrong password' });
+        }
+
+        const data = { id: user.id, name: user.name, role: user.role };
         const token = generateToken(data);
+
         res
             .status(200)
-            .cookie('login_token', token) // ✅ valid cookie name
-            .json({ login_token: token, data });
-    } else {
-        res.status(400).send('wrong password');
+            .cookie('login_token', token, {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            })
+            .json({ message: 'Login successful', token, user: data });
+
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
-})
+});
+
 
 module.exports = router;
