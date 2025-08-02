@@ -36,8 +36,11 @@ const Navbar = () => {
           >
             Live Map
           </Link>
-          <Link href="/tasks" className="hover:text-blue-600 transition-colors">
-            My Tasks
+          <Link
+            href="/admin-panel"
+            className="hover:text-blue-600 transition-colors"
+          >
+            Admin Panel
           </Link>
         </nav>
 

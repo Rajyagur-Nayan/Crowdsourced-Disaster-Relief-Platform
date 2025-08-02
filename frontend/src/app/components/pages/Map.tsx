@@ -99,7 +99,6 @@ export default function Map() {
             <Image
               src="/img1.webp"
               alt="Interactive Map View"
-              fill
               width={100}
               height={100}
               className="w-full h-full object-cover rounded-xl"
