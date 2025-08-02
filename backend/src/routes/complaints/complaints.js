@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const pool = require('../../connections/DB.connect'); // PostgreSQL pool connection
+
+const router = express.Router();
 
 // Multer setup
 const storage = multer.diskStorage({
