@@ -1,10 +1,10 @@
 import React from "react";
-import Section1 from "../components/Section1";
+import AdminPanel from "../components/AdminPanle";
 
 const page = () => {
   return (
     <div>
-      <Section1 />
+      <AdminPanel />
     </div>
   );
 };
