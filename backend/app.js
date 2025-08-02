@@ -22,6 +22,7 @@ app.use('/signup', require('./src/routes/user/signup.js'));
 app.use('/login', require('./src/routes/user/login.js'));
 app.use('/request',require('./src/routes/complaints/requests.js'));
 app.use('/dashboard',require('./src/routes/complaints/complaints.js'));
+app.use('/data',require('./src/routes/complaints/volunteer.js'));
 app.use('/stats',require('./src/routes/home/data.js'));
 
 // Ensure uploads directory exists
