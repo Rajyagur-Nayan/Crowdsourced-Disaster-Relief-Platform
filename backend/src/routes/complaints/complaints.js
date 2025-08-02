@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     const totalRequestsRes = await pool.query('SELECT COUNT(*) FROM "requests"');
     const pendingRequestsRes = await pool.query(`SELECT COUNT(*) FROM "requests" WHERE status = 'Pending'`);
     const fulfilledRequestsRes = await pool.query(`SELECT COUNT(*) FROM "requests" WHERE status = 'Fulfilled'`);
-    // const activeVolunteersRes = await pool.query(`SELECT COUNT(*) FROM volunteers WHERE is_active = true`);
+    const totalVolunteersRes = await pool.query(`SELECT COUNT(*) FROM "users" WHERE role = 'volunteer'`);
 
     const recentRequestsRes = await pool.query(`
       SELECT id, full_name AS requester, location, help_type, urgency_level, status, created_at 
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
     res.json({
       totalRequests: parseInt(totalRequestsRes.rows[0].count),
       pendingRequests: parseInt(pendingRequestsRes.rows[0].count),
-      // activeVolunteers: parseInt(activeVolunteersRes.rows[0].count),
+      totalVolunteers: parseInt(totalVolunteersRes.rows[0].count),
       fulfilledRequests: parseInt(fulfilledRequestsRes.rows[0].count),
       recentHelpRequests: recentRequestsRes.rows,
       requestCategories: requestCategories
