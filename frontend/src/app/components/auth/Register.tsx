@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import toast from "react-hot-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export function RegisterDialog({ onClose }: any) {
   const [email, setEmail] = useState("");
@@ -19,13 +21,19 @@ export function RegisterDialog({ onClose }: any) {
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log({
-      name,
-      email,
-      password,
-      confirmPassword,
-      role,
-    });
+    try {
+      console.log({
+        name,
+        email,
+        password,
+        confirmPassword,
+        role,
+      });
+      toast.success("Register Success");
+    } catch (error) {
+      console.log(error);
+      toast.error("Register Failed");
+    }
   };
 
   return (
@@ -115,14 +123,15 @@ export function RegisterDialog({ onClose }: any) {
               <option value="volunteer">Volunteer</option>
             </select>
           </div>
-
           <DialogFooter className="flex justify-end pt-4">
-            <Button
-              type="submit"
-              className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
-            >
-              Register
-            </Button>
+            <DialogClose>
+              <Button
+                type="submit"
+                className="bg-green-600 text-white hover:bg-green-700 px-6 py-2 rounded-md"
+              >
+                Register
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

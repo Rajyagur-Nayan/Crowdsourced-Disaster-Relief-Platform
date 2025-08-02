@@ -3,6 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
+import { Progress } from "@radix-ui/react-progress";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
+import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
 
 const availableRequests = [
   {
@@ -72,12 +83,19 @@ const acceptedTasks = [
     id: 1,
     title: "Deliver Food to Sector 3",
     location: "Residential Area, Sector 3",
+    description: "hello i help it ",
   },
-  { id: 2, title: "Assist Medical Camp Setup", location: "Bridge Overpass" },
+  {
+    id: 2,
+    title: "Assist Medical Camp Setup",
+    location: "Bridge Overpass",
+    description: "hello i help it ",
+  },
   {
     id: 3,
     title: "Distribute Blankets North Side",
     location: "Community Center",
+    description: "hello i help it ",
   },
 ];
 
@@ -91,25 +109,34 @@ export default function VolunteerPanel() {
           <h2 className="text-3xl font-bold mb-6">Your Task Progress</h2>
           <Card className="rounded-xl shadow-lg p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="flex flex-col items-center p-4">
+              {/* Tasks Accepted */}
+              <div className="flex flex-col items-center p-4 w-full">
                 <div className="text-sm text-gray-500 mb-2">Tasks Accepted</div>
-                <div className="text-4xl font-bold text-blue-500">8</div>
+                <div className="text-4xl font-bold text-blue-500 mb-2">8</div>
+                <Progress value={80} className="w-full" />
               </div>
-              <div className="flex flex-col items-center p-4">
+
+              {/* Tasks Completed */}
+              <div className="flex flex-col items-center p-4 w-full">
                 <div className="text-sm text-gray-500 mb-2">
                   Tasks Completed
                 </div>
-                <div className="text-4xl font-bold text-green-500">5</div>
+                <div className="text-4xl font-bold text-green-500 mb-2">5</div>
+                <Progress value={50} className="w-full" />
               </div>
-              <div className="flex flex-col items-center p-4">
+
+              {/* Tasks Pending */}
+              <div className="flex flex-col items-center p-4 w-full">
                 <div className="text-sm text-gray-500 mb-2">Tasks Pending</div>
-                <div className="text-4xl font-bold text-red-500">3</div>
+                <div className="text-4xl font-bold text-red-500 mb-2">3</div>
+                <Progress value={30} className="w-full" />
               </div>
+
+              {/* Trend Chart Placeholder */}
               <div className="col-span-1 md:col-span-4 p-4 mt-4">
                 <div className="text-xl font-semibold mb-4">
                   Monthly Task Trend
                 </div>
-                {/* Chart Placeholder */}
                 <div className="relative h-48 w-full rounded-xl bg-gray-200 overflow-hidden">
                   <div
                     className="absolute bottom-0 left-0 w-full bg-blue-100"
@@ -205,9 +232,70 @@ export default function VolunteerPanel() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <Button variant="ghost">Details</Button>
-                    <Button variant="outline">Update Status</Button>
+
+                  <div className="flex md:flex-row flex-col space-x-2">
+                    {/* Details Dialog */}
+                    {/* Task Details Dialog */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="ghost">Details</Button>
+                      </DialogTrigger>
+                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-bold">
+                            Task Details
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 text-sm text-gray-700">
+                          <p>
+                            <strong>Title:</strong> {task.title}
+                          </p>
+                          <p>
+                            <strong>Location:</strong> {task.location}
+                          </p>
+                          <p>
+                            <strong>Description:</strong> {task.description}
+                          </p>
+                        </div>
+
+                        <DialogClose>
+                          <Button variant="outline">Close</Button>
+                        </DialogClose>
+                      </DialogContent>
+                    </Dialog>
+
+                    {/* Update Status Dialog */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline">Update Status</Button>
+                      </DialogTrigger>
+                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-bold">
+                            Update Task Status
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="status">Status</Label>
+                            <Input
+                              id="status"
+                              placeholder="e.g. In Progress, Completed"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="remarks">Remarks</Label>
+                            <Input
+                              id="remarks"
+                              placeholder="Enter any remarks"
+                            />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button type="submit">Submit</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
               ))}
