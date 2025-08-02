@@ -26,7 +26,7 @@ export default function Section1() {
             </button>
 
             <a
-              href="#"
+              href="volunteer-panel"
               className="inline-flex items-center justify-center border border-green-500 text-green-700 hover:bg-green-50 rounded-md px-6 py-3 text-lg font-medium"
             >
               Become a Volunteer

@@ -1,12 +1,10 @@
-"use client"
-
-import Help from "@/pages/Help";
 import React from "react";
+import AdminPanel from "../../components/AdminPanle";
 
 const page = () => {
   return (
     <div>
-        <Help />
+      <AdminPanel />
     </div>
   );
 };
