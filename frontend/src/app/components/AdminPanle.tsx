@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Filter,
@@ -22,89 +22,121 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+interface Request {
+  id: string;
+  requester: string;
+  location: string;
+  type: string;
+  urgency: string;
+  status: string;
+  assignedTo: string;
+  timestamp: string;
+}
+
 export default function AdminPanel() {
-  const requests = [
-    {
-      id: "REQ001",
-      requester: "Maria Garcia",
-      location: "City Center",
-      type: "Food",
-      urgency: "High",
-      status: "Pending",
-      assignedTo: "N/A",
-      timestamp: "2024.07.26 10:00 AM",
-    },
-    {
-      id: "REQ002",
-      requester: "John Smith",
-      location: "East District",
-      type: "Shelter",
-      urgency: "Medium",
-      status: "In Progress",
-      assignedTo: "Emily White",
-      timestamp: "2024.07.26 09:30 AM",
-    },
-    {
-      id: "REQ003",
-      requester: "Sarah Lee",
-      location: "North Suburbs",
-      type: "Medical",
-      urgency: "High",
-      status: "Fulfilled",
-      assignedTo: "David Chen",
-      timestamp: "2024.07.26 08:00 AM",
-    },
-    {
-      id: "REQ004",
-      requester: "Ahmed Khan",
-      location: "West Side",
-      type: "Rescue",
-      urgency: "High",
-      status: "Pending",
-      assignedTo: "N/A",
-      timestamp: "2024.07.25 04:15 PM",
-    },
-    {
-      id: "REQ005",
-      requester: "Elena ",
-      location: "City Center",
-      type: "Food",
-      urgency: "Low",
-      status: "Fulfilled",
-      assignedTo: "Maria Garcia",
-      timestamp: "2024.07.25 02:00 PM",
-    },
-    {
-      id: "REQ006",
-      requester: "David Brown",
-      location: "South Sector",
-      type: "Shelter",
-      urgency: "Medium",
-      status: "In Progress",
-      assignedTo: "Carlos Ruiz",
-      timestamp: "2024.07.24 11:00 AM",
-    },
-    {
-      id: "REQ007",
-      requester: "Sophie Miller",
-      location: "East District",
-      type: "Medical",
-      urgency: "High",
-      status: "Pending",
-      assignedTo: "N/A",
-      timestamp: "2024.07.24 09:00 AM",
-    },
-    {
-      id: "REQ008",
-      requester: "Carlos Ramirez",
-      location: "North Suburbs",
-      type: "Food",
-      urgency: "Low",
-      status: "Fulfilled",
-      assignedTo: "Jessica Green",
-      timestamp: "2024.07.23 03:30 PM",
-    },
-  ];
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/dashbord");
+        const data = await res.json();
+        setRequests(data);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  //   const requests = [
+  //     {
+  //       id: "REQ001",
+  //       requester: "Maria Garcia",
+  //       location: "City Center",
+  //       type: "Food",
+  //       urgency: "High",
+  //       status: "Pending",
+  //       assignedTo: "N/A",
+  //       timestamp: "2024.07.26 10:00 AM",
+  //     },
+  //     {
+  //       id: "REQ002",
+  //       requester: "John Smith",
+  //       location: "East District",
+  //       type: "Shelter",
+  //       urgency: "Medium",
+  //       status: "In Progress",
+  //       assignedTo: "Emily White",
+  //       timestamp: "2024.07.26 09:30 AM",
+  //     },
+  //     {
+  //       id: "REQ003",
+  //       requester: "Sarah Lee",
+  //       location: "North Suburbs",
+  //       type: "Medical",
+  //       urgency: "High",
+  //       status: "Fulfilled",
+  //       assignedTo: "David Chen",
+  //       timestamp: "2024.07.26 08:00 AM",
+  //     },
+  //     {
+  //       id: "REQ004",
+  //       requester: "Ahmed Khan",
+  //       location: "West Side",
+  //       type: "Rescue",
+  //       urgency: "High",
+  //       status: "Pending",
+  //       assignedTo: "N/A",
+  //       timestamp: "2024.07.25 04:15 PM",
+  //     },
+  //     {
+  //       id: "REQ005",
+  //       requester: "Elena ",
+  //       location: "City Center",
+  //       type: "Food",
+  //       urgency: "Low",
+  //       status: "Fulfilled",
+  //       assignedTo: "Maria Garcia",
+  //       timestamp: "2024.07.25 02:00 PM",
+  //     },
+  //     {
+  //       id: "REQ006",
+  //       requester: "David Brown",
+  //       location: "South Sector",
+  //       type: "Shelter",
+  //       urgency: "Medium",
+  //       status: "In Progress",
+  //       assignedTo: "Carlos Ruiz",
+  //       timestamp: "2024.07.24 11:00 AM",
+  //     },
+  //     {
+  //       id: "REQ007",
+  //       requester: "Sophie Miller",
+  //       location: "East District",
+  //       type: "Medical",
+  //       urgency: "High",
+  //       status: "Pending",
+  //       assignedTo: "N/A",
+  //       timestamp: "2024.07.24 09:00 AM",
+  //     },
+  //     {
+  //       id: "REQ008",
+  //       requester: "Carlos Ramirez",
+  //       location: "North Suburbs",
+  //       type: "Food",
+  //       urgency: "Low",
+  //       status: "Fulfilled",
+  //       assignedTo: "Jessica Green",
+  //       timestamp: "2024.07.23 03:30 PM",
+  //     },
+  //   ];
 
   const volunteerActivity = [
     {
