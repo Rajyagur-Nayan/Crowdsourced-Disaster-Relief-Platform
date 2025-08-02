@@ -5,8 +5,8 @@ const pool = require('../../connections/DB.connect.js');
 
 // Middleware to extract user from cookie
 function authenticateToken(req, res, next) {
-    // const token = req.cookies?.token;
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkYmFmMTg5LTMzYzItNDM4MS1hOGFkLWU4MTBjNzY0MzY5MiIsIm5hbWUiOiJBbGljZSIsInJvbGUiOiJ2b2x1bnRlZXIiLCJpYXQiOjE3NTQxNTA3NDR9.M2heONDvrj5CNJO0zqbBlVmYnpUvnsccDd0bJzmHAG4';
+    const token = req.cookies?.token;
+    // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkYmFmMTg5LTMzYzItNDM4MS1hOGFkLWU4MTBjNzY0MzY5MiIsIm5hbWUiOiJBbGljZSIsInJvbGUiOiJ2b2x1bnRlZXIiLCJpYXQiOjE3NTQxNTA3NDR9.M2heONDvrj5CNJO0zqbBlVmYnpUvnsccDd0bJzmHAG4';
 
     if (!token) return res.status(401).json({ message: 'No token provided' });
 
