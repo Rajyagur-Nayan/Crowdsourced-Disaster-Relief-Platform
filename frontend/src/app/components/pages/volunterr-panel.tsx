@@ -4,25 +4,24 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@radix-ui/react-progress";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@radix-ui/react-dialog";
-import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import { DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-interface requestsProps {
-  id: number;
-  title: string;
-  urgency: string;
-  urgencyColor: string;
+interface Request {
+  full_name: string;
   location: string;
-  description: string;
-  image: string;
+  help_type: string;
+  urgency_level: string;
+  created_at: string;
 }
-
 const acceptedTasks = [
   {
     id: 1,
@@ -45,6 +44,32 @@ const acceptedTasks = [
 ];
 
 export default function VolunteerPanel() {
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/data/volunteer");
+        if (res.status !== 200) {
+          throw new Error("Failed to fetch requests");
+        }
+        setRequests(res.data);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  const requestAccepted = () => {
+    toast.success("Request Accepted Successfully");
+  };
+
+  if (loading) return <p>Loading...</p>;
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
       {/* Main Content */}
@@ -105,6 +130,50 @@ export default function VolunteerPanel() {
           </Card>
         </section>
 
+        {/* Volunteer Help Requests Section */}
+        <section>
+          <h2 className="text-3xl font-bold mb-6">New Help Requests</h2>
+          <Card className="rounded-xl shadow-lg p-6">
+            <div className="space-y-4">
+              {requests.length === 0 ? (
+                <p className="text-gray-500">No new help requests available.</p>
+              ) : (
+                requests.map((request, index) => (
+                  <div
+                    key={index}
+                    className={`flex flex-col md:flex-row md:items-center md:justify-between p-4 rounded-lg ${
+                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <div className="text-lg font-semibold text-blue-700">
+                        {request.help_type} – {request.urgency_level}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        <strong>Requested by:</strong> {request.full_name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        <strong>Location:</strong> {request.location}
+                      </div>
+
+                      <div className="text-sm text-gray-500">
+                        <strong>Date:</strong>{" "}
+                        {new Date(request.created_at).toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 md:mt-0">
+                      <Button variant="secondary" onClick={requestAccepted}>
+                        Accept
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </Card>
+        </section>
+
         {/* My Accepted Tasks Section */}
         <section>
           <h2 className="text-3xl font-bold mb-6">My Accepted Tasks</h2>
@@ -140,7 +209,7 @@ export default function VolunteerPanel() {
                             Task Details
                           </DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4 text-sm text-gray-700">
+                        <div className="space-y-4 text-sm text-gray-700 mt-5">
                           <p>
                             <strong>Title:</strong> {task.title}
                           </p>
@@ -151,10 +220,6 @@ export default function VolunteerPanel() {
                             <strong>Description:</strong> {task.description}
                           </p>
                         </div>
-
-                        <DialogClose>
-                          <Button variant="outline">Close</Button>
-                        </DialogClose>
                       </DialogContent>
                     </Dialog>
 
@@ -170,7 +235,7 @@ export default function VolunteerPanel() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
-                          <div>
+                          <div className="mt-5">
                             <Label htmlFor="status">Status</Label>
                             <Input
                               id="status"
@@ -178,16 +243,18 @@ export default function VolunteerPanel() {
                             />
                           </div>
                           <div>
-                            <Label htmlFor="remarks">Remarks</Label>
+                            <Label htmlFor="remarks" className="mb-5">
+                              Remarks
+                            </Label>
                             <Input
                               id="remarks"
                               placeholder="Enter any remarks"
                             />
                           </div>
                         </div>
-                        <DialogFooter>
-                          <Button type="submit">Submit</Button>
-                        </DialogFooter>
+                        <Button type="submit" className="mt-5">
+                          Submit
+                        </Button>
                       </DialogContent>
                     </Dialog>
                   </div>

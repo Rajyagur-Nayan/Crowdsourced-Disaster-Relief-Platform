@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
-  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -22,11 +21,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const login = (newToken: string) => {
-    Cookies.set("auth_token", newToken, { expires: 7 }); // expires in 7 days
-    setToken(newToken);
-  };
-
   const logout = () => {
     Cookies.remove("login_token");
     setToken(null);
@@ -37,7 +31,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         token,
         isAuthenticated: !!token,
-        login,
         logout,
       }}
     >

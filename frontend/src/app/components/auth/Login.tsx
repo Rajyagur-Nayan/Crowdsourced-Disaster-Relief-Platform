@@ -20,13 +20,16 @@ export function LoginDialog({ onClose }: any) {
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      
-await axios.post('http://localhost:4000/login', {
-  email,
-  password
-}, {
-  withCredentials: true // ✅ sends and receives cookies
-});
+      await axios.post(
+        "http://localhost:8080/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true, // ✅ sends and receives cookies
+        }
+      );
 
       toast.success("Login Success");
     } catch (error) {
