@@ -55,14 +55,6 @@ export default function Section1() {
                 Request Help
               </a>
             </motion.button>
-            <motion.a
-              href="volunteer-panel"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center border border-green-500 text-green-700 hover:bg-green-50 rounded-md px-6 py-3 text-lg font-medium dark:text-green-400 dark:hover:bg-green-900 transition-colors duration-500"
-            >
-              Become a Volunteer
-            </motion.a>
           </div>
         </motion.section>
 
@@ -119,14 +111,15 @@ export default function Section1() {
               <circle cx="300" cy="350" r="10" fill="#EF4444" />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.button
+              <motion.a
+                href="live-map"
                 type="button"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-6 py-3 text-lg"
               >
                 View Live Map
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
         </motion.section>

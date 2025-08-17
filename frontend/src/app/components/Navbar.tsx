@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Star, Menu, X, Sun, Moon } from "lucide-react";
 import Link from "next/link";
@@ -12,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const Navbar = () => {
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth(); // 👈 assuming user = { role: "admin" | "volunteer" | "normal" }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState("light");
@@ -49,9 +48,18 @@ const Navbar = () => {
         <Link href="/live-map" className="hover:text-blue-600">
           Live Map
         </Link>
-        <Link href="/admin-panel" className="hover:text-blue-600">
-          Admin Panel
-        </Link>
+
+        {/* Role-based links */}
+        {user?.role === "admin" && (
+          <Link href="/admin-panel" className="hover:text-blue-600">
+            Admin Panel
+          </Link>
+        )}
+        {user?.role === "volunteer" && (
+          <Link href="/volunteer" className="hover:text-blue-600">
+            Volunteer
+          </Link>
+        )}
       </nav>
 
       {/* Auth Buttons */}
@@ -181,13 +189,27 @@ const Navbar = () => {
             >
               Live Map
             </Link>
-            <Link
-              href="/admin-panel"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block"
-            >
-              Admin Panel
-            </Link>
+
+            {/* Role-based links */}
+            {user?.role === "admin" && (
+              <Link
+                href="/admin-panel"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block"
+              >
+                Admin Panel
+              </Link>
+            )}
+            {user?.role === "volunteer" && (
+              <Link
+                href="/volunteer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block"
+              >
+                Volunteer
+              </Link>
+            )}
+
             {isAuthenticated ? (
               <Button
                 onClick={() => {
