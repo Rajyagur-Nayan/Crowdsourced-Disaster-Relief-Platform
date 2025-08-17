@@ -1,13 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import {
-  Filter,
-  Upload,
-  CheckCircle,
-  AlertCircle,
-  ClipboardList,
-} from "lucide-react"; // Lucide React icons
+import { Upload, CheckCircle, AlertCircle, ClipboardList } from "lucide-react"; // Lucide React icons
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -140,13 +134,14 @@ export default function AdminPanel() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-      <main className="container mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white font-sans text-gray-800">
+      <main className="mx-auto max-w-7xl  px-8 py-12 space-y-12">
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
           Admin Panel Dashboard
         </h1>
 
         {/* Dashboard Overview Cards */}
+        <h2 className="text-3xl font-bold mb-6">Your Task Progress</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <Card className="shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -203,15 +198,12 @@ export default function AdminPanel() {
         </div>
 
         {/* Recent Help Requests & Request Categories */}
+        <h2 className="text-3xl font-bold mb-6"> Help Requests</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="shadow-lg lg:col-span-2">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Recent Help Requests</CardTitle>
               <div className="flex space-x-2">
-                <Button variant="outline" className="h-8 px-3 text-sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
                 <Button variant="outline" className="h-8 px-3 text-sm">
                   <Upload className="h-4 w-4 mr-2" />
                   Export
@@ -309,7 +301,8 @@ export default function AdminPanel() {
         </div>
 
         {/* Recent Volunteer Activity */}
-        <Card className="shadow-lg mb-12">
+        <h2 className="text-3xl font-bold mt-5 mb-6">Volunteer Activity</h2>
+        <Card className="shadow-lg mb-5 ">
           <CardHeader>
             <CardTitle>Recent Volunteer Activity</CardTitle>
           </CardHeader>

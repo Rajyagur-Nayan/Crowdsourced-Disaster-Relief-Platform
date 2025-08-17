@@ -140,7 +140,7 @@ export default function Section1() {
               transition: { staggerChildren: 0.3 },
             },
           }}
-          className="text-center mb-16"
+          className="text-center mb-5"
         >
           <motion.h2
             variants={itemVariants}

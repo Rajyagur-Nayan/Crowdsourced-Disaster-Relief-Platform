@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { MapPin } from "lucide-react";
+import { Fullscreen, MapPin } from "lucide-react";
+import Image from "next/image";
 
 // Variants for the scroll-in animation
 const itemVariants = {
@@ -32,7 +33,7 @@ export default function App() {
       location: "Suburban Area, Sector 5B",
       description:
         "Elderly resident requires urgent blood pressure medication and first aid supplies after recent flooding. Access road partially blocked due to a fallen tree.",
-      image: "https://placehold.co/400x250/FCA5A5/FFF?text=Medical+Supplies",
+      image: "/img2.jpg",
     },
     {
       id: 2,
@@ -42,7 +43,7 @@ export default function App() {
       location: "Central District, Community Hall",
       description:
         "Our town is displaced by the storm and sheltering in the community hall. Non-perishable food items and clean drinking water are desperately needed for the elderly and children.",
-      image: "https://placehold.co/400x250/FDE68A/FFF?text=Food+&+Water",
+      image: "/img3.jpg",
     },
     {
       id: 3,
@@ -52,7 +53,7 @@ export default function App() {
       location: "Northern Outskirts, Open Field",
       description:
         "Over 50 individuals are without homes after the earthquake. Need assistance setting up temporary tents and blankets. Skilled volunteers also needed to help set up.",
-      image: "https://placehold.co/400x250/FCA5A5/FFF?text=Temporary+Shelter",
+      image: "/img4.jpeg",
     },
     {
       id: 4,
@@ -62,7 +63,7 @@ export default function App() {
       location: "Coastal Village, Damaged Homes",
       description:
         "Two local residents reported missing after the tsunami hit. Search and rescue teams need additional support to comb through debris and flooded areas. Experience beneficial.",
-      image: "https://placehold.co/400x250/FCA5A5/FFF?text=Search+&+Rescue",
+      image: "/img4.jpg",
     },
     {
       id: 5,
@@ -72,7 +73,7 @@ export default function App() {
       location: "Rural Farmsteads, East Valley",
       description:
         "Contaminated water sources in isolated farming communities. Need distribution of water purification tablets and basic hygiene kits. Supplies scarce.",
-      image: "https://placehold.co/400x250/FDE68A/FFF?text=Water+Purification",
+      image: "/img6.jpg",
     },
     {
       id: 6,
@@ -82,12 +83,12 @@ export default function App() {
       location: "Temporary Evacuation Center, North Side",
       description:
         "People arrived with only the clothes on their backs. Need warm clothing, especially for children and infants. Collection point established.",
-      image: "https://placehold.co/400x250/A7F3D0/FFF?text=Clothes+Donation",
+      image: "/img7.jpg",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-200 transition-colors duration-500">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-200 transition-colors duration-500 ">
       <motion.div
         ref={ref}
         initial="hidden"
@@ -97,12 +98,12 @@ export default function App() {
             transition: { staggerChildren: 0.3 },
           },
         }}
-        className="container mx-auto px-4 py-12"
+        className="mx-auto max-w-7xl  px-8 py-12 space-y-12"
       >
         <section>
           <motion.h2
             variants={itemVariants}
-            className="flex justify-center items-center text-3xl font-bold mb-10 text-gray-900 dark:text-white transition-colors duration-500"
+            className="flex justify-center items-center text-3xl font-bold mb-15 text-gray-900 dark:text-white transition-colors duration-500"
           >
             Types of Help Requests
           </motion.h2>
@@ -115,16 +116,13 @@ export default function App() {
               >
                 {/* CardHeader equivalent with a dynamic image and urgency badge */}
                 <div className="relative p-0">
-                  <img
+                  <Image
                     src={request.image}
                     alt={request.title}
+                    width={200}
+                    height={20}
                     className="w-full h-auto object-cover rounded-t-xl"
                   />
-                  <span
-                    className={`absolute top-4 right-4 ${request.urgencyColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}
-                  >
-                    {request.urgency}
-                  </span>
                 </div>
                 {/* CardContent equivalent */}
                 <div className="p-6 flex flex-col flex-grow">
@@ -139,17 +137,6 @@ export default function App() {
                     {request.description}
                   </p>
                   {/* Button group equivalent */}
-                  <div className="flex space-x-2 mt-auto">
-                    <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition-colors duration-300">
-                      Accept
-                    </button>
-                    <button className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium py-2 px-4 rounded-md text-sm transition-colors duration-300">
-                      View Details
-                    </button>
-                    <button className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium py-2 px-4 rounded-md text-sm transition-colors duration-300">
-                      Contact
-                    </button>
-                  </div>
                 </div>
               </motion.div>
             ))}

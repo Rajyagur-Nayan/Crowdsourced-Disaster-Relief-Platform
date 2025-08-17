@@ -46,7 +46,6 @@ export default function Map() {
             lng: position.coords.longitude,
           };
           setCenter(coords);
-          toast.success("New Request Added");
           // Reverse geocode
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
@@ -89,7 +88,7 @@ export default function Map() {
   if (!isLoaded) return <p>Loading map...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-sans text-gray-800 dark:text-gray-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-200">
       <main className="flex min-h-[calc(100vh-160px)] p-8 space-x-8">
         {/* Sidebar */}
         <motion.div
