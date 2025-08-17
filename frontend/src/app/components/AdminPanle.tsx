@@ -40,7 +40,7 @@ export default function AdminPanel() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await fetch("http://localhost:8080/dashbord");
+        const res = await fetch("http://localhost:8080/dashboard");
         const data = await res.json();
         setRequests(data);
       } catch (error) {

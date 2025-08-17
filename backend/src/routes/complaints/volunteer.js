@@ -20,7 +20,7 @@ router.get('/map', async (req, res) => {
 router.get('/volunteer', async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT full_name, help_type, description, location, urgency_level, created_at
+            SELECT id, full_name, help_type, description, location, urgency_level, created_at
             FROM requests
             WHERE status = 'Pending' 
             ORDER BY created_at DESC 

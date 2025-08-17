@@ -26,6 +26,7 @@ app.use('/request',require('./src/routes/complaints/requests.js'));
 app.use('/dashboard',require('./src/routes/complaints/complaints.js'));
 app.use('/data',require('./src/routes/complaints/volunteer.js'));
 app.use('/stats',require('./src/routes/home/data.js'));
+app.use('/accept',require('./src/routes/activity/accept.js'))
 
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {

@@ -40,6 +40,7 @@ export default function Help() {
         help_type: helpType,
         description: situation,
         urgency_level: urgency,
+        phone_number:phoneNumber
       });
       toast.success("Data Added Success");
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
