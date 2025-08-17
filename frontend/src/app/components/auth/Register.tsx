@@ -22,13 +22,6 @@ export function RegisterDialog({ onClose }: any) {
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      console.log({
-        name,
-        email,
-        password,
-        confirmPassword,
-        role,
-      });
       await axios.post("http://localhost:8080/signup", {
         name,
         email,
@@ -120,6 +113,7 @@ export function RegisterDialog({ onClose }: any) {
             </Label>
             <select
               id="role"
+              title="options"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="mt-1 w-full border rounded-md px-3 py-2 bg-white dark:bg-zinc-900 text-gray-700 dark:text-white"

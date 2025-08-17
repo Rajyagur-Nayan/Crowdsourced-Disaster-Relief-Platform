@@ -1,15 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import {
-  Filter,
-  Upload,
-  CheckCircle,
-  AlertCircle,
-  UserCheck,
-  ClipboardList,
-  Eye,
-} from "lucide-react"; // Lucide React icons
+import { Upload, CheckCircle, AlertCircle, ClipboardList } from "lucide-react"; // Lucide React icons
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,28 +13,87 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Request {
   id: string;
   requester: string;
   location: string;
-  type: string;
-  urgency: string;
+  help_type: string;
+  urgency_level: string;
   status: string;
   assignedTo: string;
-  timestamp: string;
+  created_at: string;
 }
+
+type DashboardData = {
+  totalRequests: number;
+  pendingRequests: number;
+  totalVolunteers: number;
+  fulfilledRequests: number;
+  recentHelpRequests: Request[];
+  food: number;
+  shelter: number;
+  medical: number;
+  rescue: number;
+};
 
 export default function AdminPanel() {
   const [requests, setRequests] = useState<Request[]>([]);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const chartData = data
+    ? {
+        labels: ["Food", "Shelter", "Medical", "Rescue"],
+        datasets: [
+          {
+            data: [data.food, data.shelter, data.medical, data.rescue],
+            backgroundColor: [
+              "#3B82F6", // blue
+              "#22C55E", // green
+              "#EAB308", // yellow
+              "#EF4444", // red
+            ],
+            borderRadius: 50, // Makes edges rounded
+            spacing: 2,
+          },
+        ],
+      }
+    : null;
+
+  const chartOptions = {
+    cutout: "70%", // Makes it a donut
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
 
   useEffect(() => {
     const fetchRequests = async () => {
       try {
+<<<<<<< HEAD
         const res = await fetch("http://localhost:8080/dashboard");
         const data = await res.json();
         setRequests(data);
+=======
+        const res = await axios.get("http://localhost:8080/dashboard", {
+          withCredentials: true,
+        });
+        if (res.status !== 200) {
+          throw new Error("Failed to fetch requests");
+        }
+        // Assuming the response data is an array of requests
+        console.log("Fetched requests:", res.data);
+        setData(res.data);
+        setRequests(res.data.recentHelpRequests);
+>>>>>>> 5122b392b717343516004b86026ea99177d3e6e8
       } catch (error) {
         console.error("Error fetching requests:", error);
       } finally {
@@ -54,89 +105,6 @@ export default function AdminPanel() {
   }, []);
 
   if (loading) return <p>Loading...</p>;
-
-  //   const requests = [
-  //     {
-  //       id: "REQ001",
-  //       requester: "Maria Garcia",
-  //       location: "City Center",
-  //       type: "Food",
-  //       urgency: "High",
-  //       status: "Pending",
-  //       assignedTo: "N/A",
-  //       timestamp: "2024.07.26 10:00 AM",
-  //     },
-  //     {
-  //       id: "REQ002",
-  //       requester: "John Smith",
-  //       location: "East District",
-  //       type: "Shelter",
-  //       urgency: "Medium",
-  //       status: "In Progress",
-  //       assignedTo: "Emily White",
-  //       timestamp: "2024.07.26 09:30 AM",
-  //     },
-  //     {
-  //       id: "REQ003",
-  //       requester: "Sarah Lee",
-  //       location: "North Suburbs",
-  //       type: "Medical",
-  //       urgency: "High",
-  //       status: "Fulfilled",
-  //       assignedTo: "David Chen",
-  //       timestamp: "2024.07.26 08:00 AM",
-  //     },
-  //     {
-  //       id: "REQ004",
-  //       requester: "Ahmed Khan",
-  //       location: "West Side",
-  //       type: "Rescue",
-  //       urgency: "High",
-  //       status: "Pending",
-  //       assignedTo: "N/A",
-  //       timestamp: "2024.07.25 04:15 PM",
-  //     },
-  //     {
-  //       id: "REQ005",
-  //       requester: "Elena ",
-  //       location: "City Center",
-  //       type: "Food",
-  //       urgency: "Low",
-  //       status: "Fulfilled",
-  //       assignedTo: "Maria Garcia",
-  //       timestamp: "2024.07.25 02:00 PM",
-  //     },
-  //     {
-  //       id: "REQ006",
-  //       requester: "David Brown",
-  //       location: "South Sector",
-  //       type: "Shelter",
-  //       urgency: "Medium",
-  //       status: "In Progress",
-  //       assignedTo: "Carlos Ruiz",
-  //       timestamp: "2024.07.24 11:00 AM",
-  //     },
-  //     {
-  //       id: "REQ007",
-  //       requester: "Sophie Miller",
-  //       location: "East District",
-  //       type: "Medical",
-  //       urgency: "High",
-  //       status: "Pending",
-  //       assignedTo: "N/A",
-  //       timestamp: "2024.07.24 09:00 AM",
-  //     },
-  //     {
-  //       id: "REQ008",
-  //       requester: "Carlos Ramirez",
-  //       location: "North Suburbs",
-  //       type: "Food",
-  //       urgency: "Low",
-  //       status: "Fulfilled",
-  //       assignedTo: "Jessica Green",
-  //       timestamp: "2024.07.23 03:30 PM",
-  //     },
-  //   ];
 
   const volunteerActivity = [
     {
@@ -172,13 +140,14 @@ export default function AdminPanel() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-      <main className="container mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white font-sans text-gray-800">
+      <main className="mx-auto max-w-7xl  px-8 py-12 space-y-12">
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
           Admin Panel Dashboard
         </h1>
 
         {/* Dashboard Overview Cards */}
+        <h2 className="text-3xl font-bold mb-6">Your Task Progress</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <Card className="shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -188,7 +157,9 @@ export default function AdminPanel() {
               <ClipboardList className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,234</div>
+              {data && (
+                <div className="text-2xl font-bold">{data.totalRequests}</div>
+              )}
               <p className="text-xs text-muted-foreground">
                 +15% from last month
               </p>
@@ -203,23 +174,12 @@ export default function AdminPanel() {
               <AlertCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">87</div>
+              {data && (
+                <div className="text-2xl font-bold">{data.pendingRequests}</div>
+              )}
               <p className="text-xs text-muted-foreground">
                 Requires immediate action
               </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Volunteers
-              </CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">210</div>
-              <p className="text-xs text-muted-foreground">Ready to help</p>
             </CardContent>
           </Card>
 
@@ -231,7 +191,11 @@ export default function AdminPanel() {
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">987</div>
+              {data && (
+                <div className="text-2xl font-bold">
+                  {data.fulfilledRequests}
+                </div>
+              )}
               <p className="text-xs text-muted-foreground">
                 92% fulfillment rate
               </p>
@@ -240,15 +204,12 @@ export default function AdminPanel() {
         </div>
 
         {/* Recent Help Requests & Request Categories */}
+        <h2 className="text-3xl font-bold mb-6"> Help Requests</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="shadow-lg lg:col-span-2">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Recent Help Requests</CardTitle>
               <div className="flex space-x-2">
-                <Button variant="outline" className="h-8 px-3 text-sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
                 <Button variant="outline" className="h-8 px-3 text-sm">
                   <Upload className="h-4 w-4 mr-2" />
                   Export
@@ -266,9 +227,7 @@ export default function AdminPanel() {
                       <TableHead>Type</TableHead>
                       <TableHead>Urgency</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Assigned To</TableHead>
                       <TableHead>Timestamp</TableHead>
-                      <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -279,18 +238,18 @@ export default function AdminPanel() {
                         </TableCell>
                         <TableCell>{request.requester}</TableCell>
                         <TableCell>{request.location}</TableCell>
-                        <TableCell>{request.type}</TableCell>
+                        <TableCell>{request.help_type}</TableCell>
                         <TableCell>
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              request.urgency === "High"
+                              request.urgency_level === "High"
                                 ? "bg-red-100 text-red-800"
-                                : request.urgency === "Medium"
+                                : request.urgency_level === "Medium"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : "bg-green-100 text-green-800"
                             }`}
                           >
-                            {request.urgency}
+                            {request.urgency_level}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -306,13 +265,7 @@ export default function AdminPanel() {
                             {request.status}
                           </span>
                         </TableCell>
-                        <TableCell>{request.assignedTo}</TableCell>
-                        <TableCell>{request.timestamp}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
+                        <TableCell>{request.created_at}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -326,52 +279,27 @@ export default function AdminPanel() {
               <CardTitle>Request Categories</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center">
-              {/* Donut chart placeholder */}
-              <div className="relative w-48 h-48 mb-4">
-                <div className="absolute inset-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-                  Chart Placeholder
-                </div>
-                <div
-                  className="absolute inset-0 rounded-full border-8 border-t-blue-500 border-r-green-500 border-b-yellow-500 border-l-red-500 animate-spin-slow"
-                  style={{
-                    animationDuration: "5s",
-                    animationIterationCount: "infinite",
-                    animationTimingFunction: "linear",
-                  }}
-                ></div>
-                <div
-                  className="absolute inset-0 rounded-full border-8 border-transparent border-t-blue-500 border-l-blue-500"
-                  style={{ transform: "rotate(45deg)" }}
-                ></div>
-                <div
-                  className="absolute inset-0 rounded-full border-8 border-transparent border-t-green-500 border-l-green-500"
-                  style={{ transform: "rotate(135deg)" }}
-                ></div>
-                <div
-                  className="absolute inset-0 rounded-full border-8 border-transparent border-t-yellow-500 border-l-yellow-500"
-                  style={{ transform: "rotate(225deg)" }}
-                ></div>
-                <div
-                  className="absolute inset-0 rounded-full border-8 border-transparent border-t-red-500 border-l-red-500"
-                  style={{ transform: "rotate(315deg)" }}
-                ></div>
+              <div className="w-48 h-48 mb-4">
+                {chartData && (
+                  <Doughnut data={chartData} options={chartOptions} />
+                )}
               </div>
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
                 <div className="flex items-center">
                   <span className="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
-                  Food
+                  Food ({data?.food})
                 </div>
                 <div className="flex items-center">
                   <span className="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
-                  Shelter
+                  Shelter ({data?.shelter})
                 </div>
                 <div className="flex items-center">
                   <span className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
-                  Medical
+                  Medical ({data?.medical})
                 </div>
                 <div className="flex items-center">
                   <span className="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
-                  Rescue
+                  Rescue ({data?.rescue})
                 </div>
               </div>
             </CardContent>
@@ -379,7 +307,8 @@ export default function AdminPanel() {
         </div>
 
         {/* Recent Volunteer Activity */}
-        <Card className="shadow-lg mb-12">
+        <h2 className="text-3xl font-bold mt-5 mb-6">Volunteer Activity</h2>
+        <Card className="shadow-lg mb-5 ">
           <CardHeader>
             <CardTitle>Recent Volunteer Activity</CardTitle>
           </CardHeader>

@@ -24,7 +24,7 @@ import Link from "next/link";
 import axios from "axios";
 
 export default function Help() {
-  const [urgency, setUrgency] = useState("low");
+  const [urgency, setUrgency] = useState("Low");
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [location, setLocation] = useState("");
@@ -34,6 +34,7 @@ export default function Help() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
       await axios.post("http://localhost:3000/request", {
         full_name: fullName,
         location: location,
@@ -42,6 +43,22 @@ export default function Help() {
         urgency_level: urgency,
         phone_number:phoneNumber
       });
+=======
+      await axios.post(
+        "http://localhost:8080/request",
+        {
+          full_name: fullName,
+          location: location,
+          help_type: helpType,
+          description: situation,
+          urgency_level: urgency,
+        },
+        {
+          withCredentials: true, // ✅ sends and receives cookies
+        }
+      );
+
+>>>>>>> 5122b392b717343516004b86026ea99177d3e6e8
       toast.success("Data Added Success");
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       setFullName(""),
@@ -152,15 +169,15 @@ export default function Help() {
                   required
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="low" id="low" />
+                    <RadioGroupItem value="Low" id="low" />
                     <Label htmlFor="low">Low Urgency</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="medium" id="medium" />
+                    <RadioGroupItem value="Medium" id="medium" />
                     <Label htmlFor="medium">Medium Urgency</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="high" id="high" />
+                    <RadioGroupItem value="High" id="high" />
                     <Label htmlFor="high">High Urgency</Label>
                   </div>
                 </RadioGroup>

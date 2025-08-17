@@ -4,25 +4,24 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@radix-ui/react-progress";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@radix-ui/react-dialog";
-import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import { DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-interface requestsProps {
-  id: number;
-  title: string;
-  urgency: string;
-  urgencyColor: string;
+interface Request {
+  full_name: string;
   location: string;
-  description: string;
-  image: string;
+  help_type: string;
+  urgency_level: string;
+  created_at: string;
 }
-
 const acceptedTasks = [
   {
     id: 1,
@@ -45,25 +44,53 @@ const acceptedTasks = [
 ];
 
 export default function VolunteerPanel() {
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/data/volunteer");
+        if (res.status !== 200) {
+          throw new Error("Failed to fetch requests");
+        }
+        setRequests(res.data);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  const requestAccepted = () => {
+    toast.success("Request Accepted Successfully");
+  };
+
+  if (loading) return <p>Loading...</p>;
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
+    <div className="min-h-screen dark:bg-gray-900 dark:text-white bg-gray-50 font-sans text-gray-800">
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-8 py-12 space-y-12">
+      <main className="mx-auto max-w-7xl  px-8 py-12 space-y-12">
         {/* Your Task Progress Section */}
         <section>
           <h2 className="text-3xl font-bold mb-6">Your Task Progress</h2>
-          <Card className="rounded-xl shadow-lg p-6">
+          <Card className="rounded-xl  shadow-lg p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Tasks Accepted */}
               <div className="flex flex-col items-center p-4 w-full">
-                <div className="text-sm text-gray-500 mb-2">Tasks Accepted</div>
+                <div className="text-sm text-gray-500 dark:text-gray-200 mb-2">
+                  Tasks Accepted
+                </div>
                 <div className="text-4xl font-bold text-blue-500 mb-2">8</div>
                 <Progress value={80} className="w-full" />
               </div>
 
               {/* Tasks Completed */}
               <div className="flex flex-col items-center p-4 w-full">
-                <div className="text-sm text-gray-500 mb-2">
+                <div className="text-sm text-gray-500 dark:text-gray-200 mb-2">
                   Tasks Completed
                 </div>
                 <div className="text-4xl font-bold text-green-500 mb-2">5</div>
@@ -72,7 +99,9 @@ export default function VolunteerPanel() {
 
               {/* Tasks Pending */}
               <div className="flex flex-col items-center p-4 w-full">
-                <div className="text-sm text-gray-500 mb-2">Tasks Pending</div>
+                <div className="text-sm text-gray-500 dark:text-gray-200 mb-2">
+                  Tasks Pending
+                </div>
                 <div className="text-4xl font-bold text-red-500 mb-2">3</div>
                 <Progress value={30} className="w-full" />
               </div>
@@ -105,6 +134,50 @@ export default function VolunteerPanel() {
           </Card>
         </section>
 
+        {/* Volunteer Help Requests Section */}
+        <section>
+          <h2 className="text-3xl font-bold mb-6">New Help Requests</h2>
+          <Card className="rounded-xl  shadow-lg  p-6">
+            <div className="space-y-4 ">
+              {requests.length === 0 ? (
+                <p className="text-gray-500">No new help requests available.</p>
+              ) : (
+                requests.map((request, index) => (
+                  <div
+                    key={index}
+                    className={`flex flex-col md:flex-row md:items-center dark:bg-gray-800 dark:text-white md:justify-between p-4 rounded-lg ${
+                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    }`}
+                  >
+                    <div className="space-y-1 ">
+                      <div className="text-lg font-semibold text-blue-500">
+                        {request.help_type} – {request.urgency_level}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
+                        <strong>Requested by:</strong> {request.full_name}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
+                        <strong>Location:</strong> {request.location}
+                      </div>
+
+                      <div className="text-sm text-gray-500 dark:text-gray-300">
+                        <strong>Date:</strong>{" "}
+                        {new Date(request.created_at).toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 md:mt-0">
+                      <Button variant="secondary" onClick={requestAccepted}>
+                        Accept
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </Card>
+        </section>
+
         {/* My Accepted Tasks Section */}
         <section>
           <h2 className="text-3xl font-bold mb-6">My Accepted Tasks</h2>
@@ -113,7 +186,7 @@ export default function VolunteerPanel() {
               {acceptedTasks.map((task, index) => (
                 <div
                   key={task.id}
-                  className={`flex items-center justify-between p-4 rounded-lg ${
+                  className={`flex items-center justify-between p-4 rounded-lg dark:bg-gray-800 dark:text-white  ${
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
                   }`}
                 >
@@ -134,13 +207,13 @@ export default function VolunteerPanel() {
                       <DialogTrigger asChild>
                         <Button variant="ghost">Details</Button>
                       </DialogTrigger>
-                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white dark:bg-gray-700 dark:text-white  rounded-lg shadow-lg">
                         <DialogHeader>
                           <DialogTitle className="text-xl font-bold">
                             Task Details
                           </DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4 text-sm text-gray-700">
+                        <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300 mt-5">
                           <p>
                             <strong>Title:</strong> {task.title}
                           </p>
@@ -151,10 +224,6 @@ export default function VolunteerPanel() {
                             <strong>Description:</strong> {task.description}
                           </p>
                         </div>
-
-                        <DialogClose>
-                          <Button variant="outline">Close</Button>
-                        </DialogClose>
                       </DialogContent>
                     </Dialog>
 
@@ -163,31 +232,35 @@ export default function VolunteerPanel() {
                       <DialogTrigger asChild>
                         <Button variant="outline">Update Status</Button>
                       </DialogTrigger>
-                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+                      <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 bg-white rounded-lg  dark:bg-gray-800 dark:text-white shadow-lg">
                         <DialogHeader>
                           <DialogTitle className="text-xl font-bold">
                             Update Task Status
                           </DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
-                          <div>
+                          <div className="mt-5">
                             <Label htmlFor="status">Status</Label>
                             <Input
                               id="status"
+                              className="mt-5"
                               placeholder="e.g. In Progress, Completed"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="remarks">Remarks</Label>
+                            <Label htmlFor="remarks" className="mb-5">
+                              Remarks
+                            </Label>
                             <Input
                               id="remarks"
+                              className="mt-5"
                               placeholder="Enter any remarks"
                             />
                           </div>
                         </div>
-                        <DialogFooter>
-                          <Button type="submit">Submit</Button>
-                        </DialogFooter>
+                        <Button type="submit" className="mt-5">
+                          Submit
+                        </Button>
                       </DialogContent>
                     </Dialog>
                   </div>
