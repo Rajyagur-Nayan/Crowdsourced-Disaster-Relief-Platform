@@ -20,26 +20,27 @@ router.post("/", async (req, res) => {
             email,
         ]);
 
-    const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: "Wrong password" });
-    }
+        const user = DBres.rows[0];
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Wrong password" });
+        }
 
-    const data = { id: user.id, name: user.name, role: user.role };
-    const token = generateToken(data);
-    res
-      .status(200)
-      .cookie("login_token", token, {
-        httpOnly: false,
-        sameSite: "None",
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      })
-      .json({ message: "Login successful", token, user: data });
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
+        const data = { id: user.id, name: user.name, role: user.role };
+        const token = generateToken(data);
+        res
+            .status(200)
+            .cookie("login_token", token, {
+                httpOnly: false,
+                sameSite: "None",
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            })
+            .json({ message: "Login successful", token, user: data });
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 module.exports = router;

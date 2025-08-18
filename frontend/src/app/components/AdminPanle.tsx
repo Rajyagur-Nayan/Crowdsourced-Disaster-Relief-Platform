@@ -78,11 +78,6 @@ export default function AdminPanel() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-<<<<<<< HEAD
-        const res = await fetch("http://localhost:8080/dashboard");
-        const data = await res.json();
-        setRequests(data);
-=======
         const res = await axios.get("http://localhost:8080/dashboard", {
           withCredentials: true,
         });
@@ -93,7 +88,6 @@ export default function AdminPanel() {
         console.log("Fetched requests:", res.data);
         setData(res.data);
         setRequests(res.data.recentHelpRequests);
->>>>>>> 5122b392b717343516004b86026ea99177d3e6e8
       } catch (error) {
         console.error("Error fetching requests:", error);
       } finally {
